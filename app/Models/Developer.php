@@ -16,9 +16,4 @@ class Developer extends Model
 		'created_at',
 		'updated_at'
 	];
-
-	public function weekAllCapacity()
-	{
-		return self::sum('weekly_capacity')->get();
-	}
 }

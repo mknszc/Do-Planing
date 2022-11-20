@@ -23,7 +23,6 @@ class TaskRepository
 				DB::raw('GROUP_CONCAT(task_id) as tasks, week, developer_id, SUM(level * duration) as time'))
 			->groupBy('week')
 			->groupBy('developer_id')
-			->with('developer')
 			->orderBy('week')
 			->whereNotNull('week')
 			->whereNotNull('developer_id')
@@ -47,9 +46,7 @@ class TaskRepository
 				$task->week = $val['week'];
 				$task->save();
 			}
-
 			return response('Success', 200);
-
 		} catch (Exception) {
 			return response('something went wrong', 400);
 		}

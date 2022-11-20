@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssignController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,8 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/assignTask', [\App\Http\Controllers\AssignController::class, 'assignTask'])->name('assignTask');
-Route::get('/index', [\App\Http\Controllers\AssignController::class, 'index'])->name('index');
+Route::get('/assignTask', [AssignController::class, 'assignTask'])->name('assignTask');
+Route::get('/index', [AssignController::class, 'index'])->name('index');
 
 
 Route::get('/', function () {

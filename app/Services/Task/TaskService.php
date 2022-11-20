@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Http;
 
 class TaskService implements TaskServiceInterface
 {
-	public array $data = [];
 	public string $url;
 
 	public function __construct(string $url)
@@ -16,12 +15,13 @@ class TaskService implements TaskServiceInterface
 
 	public function getData(): array
 	{
+		$data = [];
 		$client = Http::get($this->url);
 
 		if ($client->successful()) {
-			$this->data = $client->json();
+			$data = $client->json();
 		}
 
-		return $this->data;
+		return $data;
 	}
 }

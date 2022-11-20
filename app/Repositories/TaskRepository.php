@@ -31,8 +31,7 @@ class TaskRepository
 
 	public function getTotalTime()
 	{
-		$task =  Task::select(DB::raw('sum(duration * level) as total_time'))
-			->first();
+		$task =  Task::select(DB::raw('sum(duration * level) as total_time'))->first();
 
 		return $task->total_time;
 	}
@@ -41,7 +40,7 @@ class TaskRepository
 	{
 		try {
 			foreach ($array as $val) {
-				$task = Task::find( $val['id']);
+				$task = Task::find($val['id']);
 				$task->developer_id = $val['developer_id'];
 				$task->week = $val['week'];
 				$task->save();

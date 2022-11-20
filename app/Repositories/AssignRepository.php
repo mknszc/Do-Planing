@@ -8,9 +8,7 @@ namespace App\Repositories;
  */
 class AssignRepository
 {
-	public function __construct(
-		TaskRepository $taskRepository,
-		DeveloperRepository $developerRepository)
+	public function __construct(TaskRepository $taskRepository, DeveloperRepository $developerRepository)
 	{
 		$this->taskRepository = $taskRepository;
 		$this->developerRepository = $developerRepository;
@@ -19,14 +17,14 @@ class AssignRepository
 	public function assignTaskAndSave(): bool
 	{
 		$plan = [];
-		$plan_temp = [];
+		$planTemp = [];
 		$tasks = $this->taskRepository->getAllDesc();
 		$developers = $this->developerRepository->getAll();
-		$total_task_time = $this->taskRepository->getTotalTime();
-		$total_dev_capacity = $this->developerRepository->getTotalCapacity();
+		$totalTaskTime = $this->taskRepository->getTotalTime();
+		$totalDevCapacity = $this->developerRepository->getTotalCapacity();
 
-		for ($week = 1; count($tasks) > 0; $week++) {
-			if ((int)($total_task_time / $total_dev_capacity) > 0) {
+		for ($week = 1; !empty($tasks); $week++) {
+			if ((int)($totalTaskTime / $totalDevCapacity) > 0) {
 				foreach ($developers as $dev) {
 					$total = 0;
 					foreach ($tasks as $key => $task) {
@@ -35,32 +33,32 @@ class AssignRepository
 							$plan[$task->id]['id'] = $task->id;
 							$plan[$task->id]['developer_id'] = $dev->id;
 							$plan[$task->id]['week'] = $week;
-							$total_task_time -= $task->time;
+							$totalTaskTime -= $task->time;
 							unset($tasks[$key]);
 						}
 					}
 				}
 			} else {
-				$ratio = ($total_dev_capacity / $total_task_time);
-				$tasks_temp = $tasks->toArray();
+				$ratio = ($totalDevCapacity / $totalTaskTime);
+				$tasksTemp = $tasks->toArray();
 
-				while (count($tasks_temp) > 0) {
+				while (!empty($tasksTemp)) {
 					foreach ($developers as $dev) {
 						$capacity = ($dev->capacity / $ratio);
 						$total = 0;
-						foreach ($tasks_temp as $key => $task_temp) {
-							if ($total + ($task_temp['time']) <= ($capacity)) {
-								$total += $task_temp['time'];
-								$plan_temp[$task_temp['id']]['id'] = $task_temp['id'];
-								$plan_temp[$task_temp['id']]['developer_id'] = $dev->id;
-								$plan_temp[$task_temp['id']]['week'] = $week;
-								unset($tasks_temp[$key]);
+						foreach ($tasksTemp as $key => $taskTemp) {
+							if ($total + ($taskTemp['time']) <= ($capacity)) {
+								$total += $taskTemp['time'];
+								$planTemp[$taskTemp['id']]['id'] = $taskTemp['id'];
+								$planTemp[$taskTemp['id']]['developer_id'] = $dev->id;
+								$planTemp[$taskTemp['id']]['week'] = $week;
+								unset($tasksTemp[$key]);
 							}
 						}
 					}
 
-					if (count($tasks_temp) > 0) {
-						$tasks_temp = $tasks->toArray();
+					if (!empty($tasksTemp)) {
+						$tasksTemp = $tasks->toArray();
 						$ratio -= 0.05;
 					} else {
 						$tasks = [];
@@ -69,10 +67,10 @@ class AssignRepository
 			}
 		}
 
-		$plan = array_merge($plan, $plan_temp);
+		$plan = array_merge($plan, $planTemp);
 
 		$this->taskRepository->updateTask($plan);
 
-		return True;
+		return true;
 	}
 }

@@ -37,12 +37,15 @@ class SaveTasks extends Command
 		}
 	}
 
-	public function handle()
+	/**
+	 * @throws Exception
+	 */
+	public function handle(): bool
 	{
 		$this->info('Adding data');
 		$this->insert();
 		$this->info('Successfully');
 
-		return True;
+		return true;
 	}
 }

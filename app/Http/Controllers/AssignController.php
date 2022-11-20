@@ -11,9 +11,7 @@ use App\Repositories\AssignRepository;
  */
 class AssignController extends Controller
 {
-	public function __construct(
-		TaskRepository $taskRepository,
-		AssignRepository $assignRepository)
+	public function __construct(TaskRepository $taskRepository, AssignRepository $assignRepository)
 	{
 		$this->taskRepository = $taskRepository;
 		$this->assignRepository = $assignRepository;

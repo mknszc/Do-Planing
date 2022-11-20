@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Expression;
 
 /**
- * @method static select(string $string, \Illuminate\Database\Query\Expression $raw)
+ * @method static select(string $string, Expression $raw)
+ * @method static insert(array $data)
  */
 class Task extends Model
 {
